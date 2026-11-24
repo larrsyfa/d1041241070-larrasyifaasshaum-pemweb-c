@@ -1,0 +1,414 @@
+:root {
+  --bg-blush: #FFF6F7;
+  --card-white: #FFFFFF;
+  --border-rose: #F4DCE0;
+  --rose-pink: #DB2777;
+  --rose-dark: #BE185D;
+  --rose-soft: #FCE7F3;
+  --olive-sage: #4D7C5B;
+  --olive-soft: #E8F1EB;
+  --warm-apricot: #F59E0B;
+  --apricot-soft: #FEF3C7;
+  --cocoa-text: #271F24;
+  --muted-text: #6B5E65;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  background-color: var(--bg-blush);
+  color: var(--cocoa-text);
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 24px 18px 56px;
+}
+
+/* Header & Navigasi */
+.site-header {
+  background: var(--card-white);
+  border-bottom: 1px solid var(--border-rose);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.header-inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 14px 18px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.brand-logo {
+  font-size: 1.35rem;
+  font-weight: bold;
+  color: var(--rose-pink);
+  text-decoration: none;
+}
+
+.nav-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: var(--cocoa-text);
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-size: 0.92rem;
+  transition: all 0.2s ease;
+}
+
+.nav-link:hover {
+  background: var(--rose-soft);
+  color: var(--rose-dark);
+}
+
+.btn-primary {
+  display: inline-block;
+  background: var(--rose-pink);
+  color: #FFFFFF;
+  border: none;
+  padding: 9px 18px;
+  border-radius: 999px;
+  font-size: 0.92rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.2s ease;
+}
+
+.btn-primary:hover {
+  background: var(--rose-dark);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  display: inline-block;
+  background: var(--olive-soft);
+  color: var(--olive-sage);
+  border: 1px solid #C6DBC9;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 0.88rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+  background: var(--olive-sage);
+  color: #FFFFFF;
+}
+
+/* Hero & Search Bar */
+.hero-box {
+  background: linear-gradient(135deg, #FFFFFF 0%, #FFF0F3 100%);
+  border: 1px solid var(--border-rose);
+  border-radius: 20px;
+  padding: 28px 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 8px 24px rgba(219, 39, 119, 0.05);
+}
+
+.hero-title {
+  margin: 0 0 8px;
+  font-size: 1.8rem;
+  color: var(--cocoa-text);
+}
+
+.hero-subtitle {
+  margin: 0 0 18px;
+  color: var(--muted-text);
+}
+
+.search-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.search-input {
+  flex: 1 1 260px;
+  padding: 11px 16px;
+  border: 2px solid var(--border-rose);
+  border-radius: 999px;
+  background: #FFFFFF;
+  color: var(--cocoa-text);
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.search-input:focus {
+  border-color: var(--rose-pink);
+  box-shadow: 0 0 0 4px rgba(219, 39, 119, 0.12);
+}
+
+/* Filter Genre Pills */
+.genre-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 22px;
+}
+
+.genre-pill {
+  text-decoration: none;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  background: var(--card-white);
+  color: var(--muted-text);
+  border: 1px solid var(--border-rose);
+  transition: all 0.2s ease;
+}
+
+.genre-pill:hover,
+.genre-pill.active {
+  background: var(--olive-sage);
+  color: #FFFFFF;
+  border-color: var(--olive-sage);
+}
+
+/* Grid Katalog Buku */
+.books-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 18px;
+}
+
+.book-card {
+  background: var(--card-white);
+  border: 1px solid var(--border-rose);
+  border-radius: 18px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.book-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--rose-pink);
+  box-shadow: 0 12px 26px rgba(219, 39, 119, 0.09);
+}
+
+.book-badge {
+  display: inline-block;
+  align-self: flex-start;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: bold;
+  background: var(--olive-soft);
+  color: var(--olive-sage);
+  margin-bottom: 10px;
+}
+
+.book-title {
+  margin: 0 0 6px;
+  font-size: 1.08rem;
+  color: var(--cocoa-text);
+}
+
+.book-author {
+  margin: 0 0 10px;
+  font-size: 0.88rem;
+  color: var(--rose-dark);
+}
+
+.book-sinopsis {
+  margin: 0 0 14px;
+  font-size: 0.88rem;
+  color: var(--muted-text);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.book-meta {
+  font-size: 0.8rem;
+  color: var(--muted-text);
+  background: var(--bg-blush);
+  padding: 8px 10px;
+  border-radius: 10px;
+  margin-bottom: 12px;
+}
+
+.empty-state {
+  background: var(--card-white);
+  border: 1px dashed var(--border-rose);
+  border-radius: 16px;
+  padding: 32px 20px;
+  text-align: center;
+  color: var(--muted-text);
+}
+
+/* Detail Buku & Ulasan */
+.detail-card {
+  background: var(--card-white);
+  border: 1px solid var(--border-rose);
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 22px;
+  box-shadow: 0 8px 22px rgba(219, 39, 119, 0.05);
+}
+
+.review-list {
+  list-style: none;
+  padding: 0;
+  margin: 14px 0 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.review-item {
+  background: var(--bg-blush);
+  border: 1px solid var(--border-rose);
+  border-radius: 14px;
+  padding: 14px;
+}
+
+.review-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.reviewer-link {
+  font-weight: bold;
+  color: var(--rose-dark);
+  text-decoration: none;
+}
+
+.reviewer-link:hover {
+  text-decoration: underline;
+}
+
+.title-badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: bold;
+  background: var(--apricot-soft);
+  color: #B45309;
+  border: 1px solid #FDE68A;
+}
+
+.like-btn {
+  border: 1px solid var(--border-rose);
+  background: var(--card-white);
+  color: var(--rose-dark);
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 0.84rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.like-btn.liked,
+.like-btn:hover {
+  background: var(--rose-pink);
+  color: #FFFFFF;
+  border-color: var(--rose-pink);
+}
+
+.review-form-box {
+  background: #FFFDFD;
+  border: 1px solid var(--border-rose);
+  border-radius: 14px;
+  padding: 14px;
+  margin-top: 12px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid var(--border-rose);
+  border-radius: 10px;
+  background: #FFFFFF;
+  color: var(--cocoa-text);
+  font-family: inherit;
+  font-size: 0.92rem;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--rose-pink);
+  box-shadow: 0 0 0 3px rgba(219, 39, 119, 0.12);
+}
+
+.alert-error {
+  background: #FEF2F2;
+  color: #B91C1C;
+  border: 1px solid #FECACA;
+  padding: 10px 14px;
+  border-radius: 12px;
+  margin-bottom: 14px;
+}
+
+.alert-success {
+  background: var(--olive-soft);
+  color: var(--olive-sage);
+  border: 1px solid #C6DBC9;
+  padding: 10px 14px;
+  border-radius: 12px;
+  margin-bottom: 14px;
+}
+
+/* Modal Pop-up Reward */
+.popup-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(39, 31, 36, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  padding: 16px;
+}
+
+.popup-card {
+  background: linear-gradient(160deg, #FFFFFF 0%, #FFF6F7 100%);
+  border: 2px solid var(--border-rose);
+  padding: 24px;
+  border-radius: 20px;
+  max-width: 410px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 14px 34px rgba(219, 39, 119, 0.18);
+}
+
+.reward-pill {
+  display: inline-block;
+  background: var(--apricot-soft);
+  color: #B45309;
+  font-weight: bold;
+  padding: 6px 14px;
+  border-radius: 999px;
+  margin: 8px 0 12px;
+  font-size: 0.92rem;
+}

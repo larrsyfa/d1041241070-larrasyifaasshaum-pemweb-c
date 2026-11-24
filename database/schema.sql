@@ -1,24 +1,28 @@
 CREATE DATABASE IF NOT EXISTS reviewbuku;
 USE reviewbuku;
 
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
   id INT AUTO_INCREMENT PRIMARY KEY,
   nama VARCHAR(100) NOT NULL,
   email VARCHAR(100) NOT NULL UNIQUE,
   password VARCHAR(255) NOT NULL,
-  role ENUM('user','admin') NOT NULL DEFAULT 'user'
+  role ENUM('user','admin') NOT NULL DEFAULT 'user',
+  bio TEXT NULL
 );
 
-CREATE TABLE books (
+CREATE TABLE IF NOT EXISTS books (
   id INT AUTO_INCREMENT PRIMARY KEY,
   judul VARCHAR(150) NOT NULL,
   penulis VARCHAR(100) NOT NULL,
   genre VARCHAR(50),
   sinopsis TEXT,
-  cover VARCHAR(255)
+  cover VARCHAR(255),
+  jumlah_halaman INT UNSIGNED NULL,
+  tahun_terbit SMALLINT UNSIGNED NULL,
+  penerbit VARCHAR(100) NULL
 );
 
-CREATE TABLE reviews (
+CREATE TABLE IF NOT EXISTS reviews (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT NOT NULL,
   book_id INT NOT NULL,
@@ -27,4 +31,14 @@ CREATE TABLE reviews (
   tanggal DATETIME DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
   FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS review_likes (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  review_id INT NOT NULL,
+  user_id INT NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE KEY uq_review_user_like (review_id, user_id),
+  CONSTRAINT fk_like_review FOREIGN KEY (review_id) REFERENCES reviews(id) ON DELETE CASCADE,
+  CONSTRAINT fk_like_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
