@@ -5,6 +5,15 @@ require_once __DIR__ . '/includes/auth.php';
 $error = '';
 
 if (is_logged_in()) {
+    $role = $_SESSION['role'] ?? 'user';
+    if ($role === 'admin') {
+        header('Location: /reviewbuku/admin/books.php');
+        exit;
+    }
+    if (empty($_SESSION['onboarding_done'])) {
+        header('Location: /reviewbuku/onboarding.php');
+        exit;
+    }
     header('Location: /reviewbuku/index.php');
     exit;
 }
@@ -16,14 +25,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($email === '' || $password === '') {
         $error = 'Email dan password wajib diisi.';
     } else {
-        $stmt = $pdo->prepare('SELECT id, nama, email, password, role FROM users WHERE email = :email LIMIT 1');
+        $stmt = $pdo->prepare(
+            'SELECT id, nama, email, password, role, onboarding_done
+             FROM users
+             WHERE email = :email
+             LIMIT 1'
+        );
         $stmt->execute(['email' => $email]);
         $user = $stmt->fetch();
 
         if ($user && password_verify($password, $user['password'])) {
+            session_regenerate_id(true);
             $_SESSION['user_id'] = (int) $user['id'];
             $_SESSION['nama'] = $user['nama'];
             $_SESSION['role'] = $user['role'] ?? 'user';
+            $_SESSION['onboarding_done'] = (int) ($user['onboarding_done'] ?? 0);
+
+            if ($_SESSION['role'] === 'admin') {
+                header('Location: /reviewbuku/admin/books.php');
+                exit;
+            }
+
+            if ($_SESSION['onboarding_done'] === 0) {
+                header('Location: /reviewbuku/onboarding.php');
+                exit;
+            }
 
             header('Location: /reviewbuku/index.php');
             exit;

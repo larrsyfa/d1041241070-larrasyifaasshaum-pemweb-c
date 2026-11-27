@@ -3,7 +3,6 @@ require_once __DIR__ . '/config/database.php';
 require_once __DIR__ . '/includes/auth.php';
 
 $error = '';
-$success = '';
 
 if (is_logged_in()) {
     header('Location: /reviewbuku/index.php');
@@ -14,13 +13,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nama = trim($_POST['nama'] ?? '');
     $email = trim($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';
+    $passwordConfirm = $_POST['password_confirm'] ?? '';
 
-    if ($nama === '' || $email === '' || $password === '') {
-        $error = 'Nama, email, dan password wajib diisi.';
+    if ($nama === '' || $email === '' || $password === '' || $passwordConfirm === '') {
+        $error = 'Nama, email, password, dan konfirmasi password wajib diisi.';
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $error = 'Format email tidak valid.';
     } elseif (strlen($password) < 6) {
         $error = 'Password minimal 6 karakter.';
+    } elseif ($password !== $passwordConfirm) {
+        $error = 'Konfirmasi password tidak cocok.';
     } else {
         $checkStmt = $pdo->prepare('SELECT id FROM users WHERE email = :email LIMIT 1');
         $checkStmt->execute(['email' => $email]);
@@ -30,7 +32,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
             $insertStmt = $pdo->prepare(
-                'INSERT INTO users (nama, email, password, role) VALUES (:nama, :email, :password, :role)'
+                'INSERT INTO users (nama, email, password, role, onboarding_done)
+                 VALUES (:nama, :email, :password, :role, 0)'
             );
             $insertStmt->execute([
                 'nama' => $nama,
@@ -39,7 +42,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'role' => 'user',
             ]);
 
-            $success = 'Akun berhasil dibuat! Silakan login untuk mulai mengulas buku.';
+            $newUserId = (int) $pdo->lastInsertId();
+
+            // Set session login agar user baru bisa langsung masuk ke alur onboarding
+            $_SESSION['user_id'] = $newUserId;
+            $_SESSION['user_nama'] = $nama;
+            $_SESSION['user_email'] = $email;
+            $_SESSION['user_role'] = 'user';
+            $_SESSION['onboarding_done'] = 0;
+
+            header('Location: /reviewbuku/onboarding.php');
+            exit;
         }
     }
 }
@@ -69,18 +82,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <span class="book-badge">Daftar Akun</span>
             <h1 class="hero-title" style="font-size: 1.5rem; margin-top: 8px;">Buat Akun Pembaca</h1>
             <p class="book-sinopsis" style="-webkit-line-clamp: unset; overflow: visible; margin-bottom: 16px;">
-                Bergabung untuk memberi ulasan buku, kumpulkan poin &amp; hati (+10 tiap ulasan), dan raih *title* pembaca.
+                Bergabung untuk mengatur target bacaan, memilih genre favorit, memberi ulasan buku, dan mengumpulkan +10 poin tiap ulasan.
             </p>
 
             <?php if ($error !== ''): ?>
                 <div class="alert-error" role="alert"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></div>
-            <?php endif; ?>
-
-            <?php if ($success !== ''): ?>
-                <div class="alert-success" role="status">
-                    <?= htmlspecialchars($success, ENT_QUOTES, 'UTF-8') ?>
-                    <a href="/reviewbuku/login.php" class="reviewer-link" style="margin-left: 6px;">Masuk sekarang →</a>
-                </div>
             <?php endif; ?>
 
             <form method="POST" action="/reviewbuku/register.php" id="registerForm">
@@ -124,12 +130,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         Lihat
                     </button>
                 </div>
-                <p id="passwordHint" class="book-meta" style="margin: 0 0 16px;">
+                <p id="passwordHint" class="book-meta" style="margin: 0 0 12px;">
                     Kekuatan password: <strong>Belum diisi</strong> (minimal 6 karakter).
                 </p>
 
+                <label for="password_confirm" style="display: block; margin-bottom: 6px; font-weight: bold;">Konfirmasi Password</label>
+                <input
+                    type="password"
+                    id="password_confirm"
+                    name="password_confirm"
+                    class="form-control"
+                    placeholder="Ulangi password"
+                    minlength="6"
+                    required
+                    style="margin-bottom: 16px;"
+                >
+
                 <button type="submit" id="submitRegisterBtn" class="btn-primary" style="width: 100%;">
-                    Daftar
+                    Daftar &amp; Lanjut Onboarding
                 </button>
             </form>
 
